@@ -1,12 +1,11 @@
 import java.awt.Dimension;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
-public class LeagueInvaders implements KeyListener {
+public class LeagueInvaders  {
 	JFrame frame;
 	GamePanel panel;
+	
 public static void main(String[] args) {
 	new LeagueInvaders().setup();
 }
@@ -26,21 +25,8 @@ private void setup() {
 
     frame.pack();
     panel.startGame();
-    panel.addKeyListener(panel);
+    frame.addKeyListener(panel);
 }
-@Override
-public void keyTyped(KeyEvent e) {
-	// TODO Auto-generated method stub
-	
-}
-@Override
-public void keyPressed(KeyEvent e) {
-	// TODO Auto-generated method stub
-	
-}
-@Override
-public void keyReleased(KeyEvent e) {
-	// TODO Auto-generated method stub
-	
-}
+
+
 }
