@@ -21,17 +21,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	Font clickFont;
 	Rocketship rocket ;
 	GameObject object;
+	ObjectManager manager;
 	public GamePanel() {
 	timer = new Timer(1000/60,this);
 	titleFont = new Font("Arial", Font.BOLD, 48 );
 	clickFont = new Font("Arial", Font.BOLD, 28);
-	rocket = new Rocketship(rocket.x ,   rocket.y  , 50, 50);
+	rocket = new Rocketship(225  , 750  , 50, 50);
+	manager = new ObjectManager(rocket);
 	}
 	void updateMenuState() {
 		
 	}
 	void updateGameState() {
-		rocket.update();
+		manager.update();
+		manager.manageEnemies();
+		manager.checkCollision();
+		manager.purgeObjects();
+		
 	}
 	void updateEndState() {
 		
@@ -53,7 +59,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	void drawGameState(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, 500 ,800 );  
-		rocket.draw(g);
+		manager.draw(g);
 	}
 	void drawEndState(Graphics g) {
 		g.setColor(Color.RED);
@@ -118,7 +124,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		//System.out.println("KeyPressed");
+		System.out.println("KeyPressed");
 		if(e.getKeyCode()==KeyEvent.VK_ENTER) {
 			System.out.println("Enter is pressed");
 			if(CURRENT_STATE >= END_STATE){
@@ -131,23 +137,28 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			else if(CURRENT_STATE == GAME_STATE) {
 				CURRENT_STATE = END_STATE;
 			}
+		}
 		if(e.getKeyCode()==KeyEvent.VK_UP) {
-			key = 1;
-			rocket.update();
+		rocket.motion = true;
+		System.out.println("KeyPressed");
+			rocket.update(rocket.UP);
 		}
 		else if(e.getKeyCode()==KeyEvent.VK_DOWN) {
-			key  =2;
-			rocket.update();
+			rocket.motion = true;
+			rocket.update(rocket.DOWN);
 		}
 		else if(e.getKeyCode()==KeyEvent.VK_RIGHT) {
-			key =3;
-			rocket.update();
+			rocket.motion = true;
+			rocket.update(rocket.RIGHT);
 		}
 		else if(e.getKeyCode()==KeyEvent.VK_LEFT) {
-			key=4;
-			rocket.update();
+			rocket.motion = true;
+			rocket.update(rocket.LEFT);
 		}
-		key=0;
+		else if(e.getKeyCode()==KeyEvent.VK_SPACE) {
+			 manager.addProjectile(new Projectile(rocket.x + 20, rocket.y, 10, 10));
+		
+			
 		}
 //object.update();
 		
@@ -158,9 +169,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 		//System.out.println("keyReleased");
-		if(e.getKeyCode()==KeyEvent.VK_UP) {
-			
-		}
+		rocket.motion = false;
 	}
 		}
 
