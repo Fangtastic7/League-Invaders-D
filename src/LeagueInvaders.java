@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 
 public class LeagueInvaders  {
+	static final int width = 500;
+	static final int height = 800;
 	JFrame frame;
 	GamePanel panel;
 	
@@ -19,12 +21,11 @@ public LeagueInvaders() {
 private void setup() {
 	// TODO Auto-generated method stub
 	frame.setVisible(true);
-	final int length = 500;
-	final int height = 800;
-	frame.setSize(length, height);
+	
+	frame.setSize(width, height);
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	frame.add(panel);
-	frame.getContentPane().setPreferredSize(new Dimension(length, height));
+	frame.getContentPane().setPreferredSize(new Dimension(width, height));
 
     frame.pack();
     panel.startGame();

@@ -1,7 +1,15 @@
+/Alien.class
 /GameObject.class
 /GamePanel.class
 /LeagueInvaders.class
-/Rocketship.class
 /ObjectManager.class
 /Projectile.class
-/Alien.class
+/Rocketship.class
+/alien.png.webloc
+/bullet.png.webloc
+/space.png.webloc
+/rocket.png.webloc
+/bullet.png
+/alien.png
+/rocket.png
+/space.png

@@ -6,12 +6,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	Timer timer;
+	public static BufferedImage alienImg;
+    public static BufferedImage rocketImg;
+    public static BufferedImage bulletImg;
+    public static BufferedImage spaceImg;
 	final int MENU_STATE = 0;
 	final int GAME_STATE = 1;
 	final int END_STATE = 2;
@@ -28,6 +35,23 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 	clickFont = new Font("Arial", Font.BOLD, 28);
 	rocket = new Rocketship(225  , 750  , 50, 50);
 	manager = new ObjectManager(rocket);
+    try {
+
+        alienImg = ImageIO.read(this.getClass().getResourceAsStream("alien.png"));
+
+        rocketImg = ImageIO.read(this.getClass().getResourceAsStream("rocket.png"));
+
+        bulletImg = ImageIO.read(this.getClass().getResourceAsStream("bullet.png"));
+
+        spaceImg = ImageIO.read(this.getClass().getResourceAsStream("space.png"));
+
+} catch (IOException e) {
+
+        // TODO Auto-generated catch block
+
+        e.printStackTrace();
+
+}
 	}
 	void updateMenuState() {
 		
@@ -37,6 +61,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		manager.manageEnemies();
 		manager.checkCollision();
 		manager.purgeObjects();
+		if(rocket.isAlive==false) {
+			CURRENT_STATE = END_STATE;
+			
+		}
 		
 	}
 	void updateEndState() {
@@ -57,8 +85,8 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 
 	}
 	void drawGameState(Graphics g) {
-		g.setColor(Color.BLACK);
-		g.fillRect(0, 0, 500 ,800 );  
+	
+		 g.drawImage(GamePanel.spaceImg, 0, 0, 500, 800, null);
 		manager.draw(g);
 	}
 	void drawEndState(Graphics g) {
@@ -68,7 +96,7 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		g.setFont(titleFont);
 		g.drawString("Game Over", 110, 200);
 		g.setFont(clickFont);
-		g.drawString("You killed 5 enemies", 115, 350);
+		g.drawString("You killed " + manager.score + " enemies", 115, 350);
 		g.drawString("Press ENTER to restart", 95, 500);
 	}
 	
@@ -126,6 +154,10 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 		// TODO Auto-generated method stub
 		System.out.println("KeyPressed");
 		if(e.getKeyCode()==KeyEvent.VK_ENTER) {
+			if(CURRENT_STATE >= END_STATE) {
+				rocket = new Rocketship(225  , 750  , 50, 50);
+				manager = new ObjectManager(rocket);
+			}
 			System.out.println("Enter is pressed");
 			if(CURRENT_STATE >= END_STATE){
 				
@@ -137,28 +169,35 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener{
 			else if(CURRENT_STATE == GAME_STATE) {
 				CURRENT_STATE = END_STATE;
 			}
-		}
-		if(e.getKeyCode()==KeyEvent.VK_UP) {
-		rocket.motion = true;
-		System.out.println("KeyPressed");
-			rocket.update(rocket.UP);
-		}
-		else if(e.getKeyCode()==KeyEvent.VK_DOWN) {
-			rocket.motion = true;
-			rocket.update(rocket.DOWN);
-		}
-		else if(e.getKeyCode()==KeyEvent.VK_RIGHT) {
-			rocket.motion = true;
-			rocket.update(rocket.RIGHT);
-		}
-		else if(e.getKeyCode()==KeyEvent.VK_LEFT) {
-			rocket.motion = true;
-			rocket.update(rocket.LEFT);
+			
 		}
 		else if(e.getKeyCode()==KeyEvent.VK_SPACE) {
 			 manager.addProjectile(new Projectile(rocket.x + 20, rocket.y, 10, 10));
-		
+		}
+		else {
+			if(!rocket.motion) {
+				
 			
+			
+		
+		if(e.getKeyCode()==KeyEvent.VK_UP) {
+		rocket.motion = true;
+		System.out.println("KeyPressed");
+			rocket.type=(rocket.UP);
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_DOWN) {
+			rocket.motion = true;
+			rocket.type=(rocket.DOWN);
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_RIGHT) {
+			rocket.motion = true;
+			rocket.type=(rocket.RIGHT);
+		}
+		else if(e.getKeyCode()==KeyEvent.VK_LEFT) {
+			rocket.motion = true;
+			rocket.type=(rocket.LEFT);
+		}
+		}
 		}
 //object.update();
 		
